@@ -3,6 +3,8 @@ import axios from "axios";
 
 // The breed selection input element.
 const breedSelect = document.getElementById("breedSelect");
+const select = document.querySelector("select");
+console.log(select);
 // The information section div element.
 const infoDump = document.getElementById("infoDump");
 // The progress bar div element.
@@ -32,7 +34,7 @@ async function initialLoad() {
 
     // create variable to store <select> tag because
     // for some reason breedSelect is null
-    let select = document.querySelector("select");
+
     // Create new <options> for each of these breeds, and append them to breedSelect.
     // This will place the name of the breeds in the dropbox
     for (let breed of breedList) {
@@ -66,22 +68,47 @@ initialLoad();
  */
 let selected = document.querySelector("select");
 
+
+// * 2. Create an event handler for breedSelect that does the following:
+// * - Retrieve information on the selected breed from the cat API using fetch()
+//Once the mouse clicks on the choosen breed, then
+//that id is selected
 selected.addEventListener("change", (e) => {
   const id = e.target.value;
   if (id) {
     select(id);
   }
-});
 
-async function catBreed() {
-  try {
-    let breedList = await fetch(
-      "https://api.thecatapi.com/v1/breeds/:breed_id"
-    );
-    breedId = await breedList.json();
-    console.log(breedListId);
-  } catch (err) {}
+  
+  // fetch the breed from the id choosen in addEventListener
+  async function fetchCatBreed() {
+    try {
+      // Await the fetch call and get the Response object
+      // It will select only the breed under the unique id
+      // ex: https://api.thecatapi.com/v1/breeds/abys where (id = abys)
+      // Make sure your request is receiving multiple array items!
+      const response = await fetch(`https://api.thecatapi.com/v1/breeds/${id}`);
+  
+      // Check if the request was successful
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      // Await the conversion of the response body to JSON
+      const data = await response.json();
+  
+    } catch (error) {
+      // Handle any errors that occurred during the fetch
+      console.error('Fetch error:', error);
+    }
+  }
+  
+  fetchCatBreed();
+
+
 }
+
+
 
 /**
  * 3. Fork your own sandbox, creating a new one named "JavaScript Axios Lab."
