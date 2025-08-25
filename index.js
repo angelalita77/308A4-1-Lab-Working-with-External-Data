@@ -22,17 +22,34 @@ const API_KEY =
  *  - Each option should display text equal to the name of the breed.
  * This function should execute immediately.
  */
+
+//  Create an async function "initialLoad" that does the following:
+//  * - Retrieve a list of breeds from the cat API using fetch().
 async function initialLoad() {
   try {
     let breedList = await fetch("https://api.thecatapi.com/v1/breeds");
-    breedList = await breedList.json();
+    breedList = await breedList.json(); //load object array of breeds into breedList
     console.log(breedList);
+
+    // create variable to store <select> tag because
+    // for some reason breedSelect is null
+    let select = document.querySelector("select");
+
+    // Create new <options> for each of these breeds, and append them to breedSelect.
+    // This will place the name of the breeds in the dropbox
+    for (let breed of breedList) {
+      let option = document.createElement("option");
+      select.appendChild(option).textContent = breed.name;
+    }
   } catch (err) {
     console.error(err.message);
   }
 }
 
 initialLoad();
+
+//  Create new <options> for each of these breeds, and append them to breedSelect.
+
 /**
  * 2. Create an event handler for breedSelect that does the following:
  * - Retrieve information on the selected breed from the cat API using fetch().
